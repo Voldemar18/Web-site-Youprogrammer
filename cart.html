@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">...</header>
+    <main class="container">
+        <h1>Корзина</h1>
+        <table style="width:100%; border-collapse:collapse;">
+            <thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th></th></tr></thead>
+            <tbody id="cart-items-container"></tbody>
+        </table>
+        <div style="text-align:right; margin-top:20px;">
+            <h3>Итого: <span id="cart-total">0</span> ₽</h3>
+            <button class="btn-primary">Оформить заказ</button>
+        </div>
+    </main>
+    <script src="js/main.js"></script>
+</body>
+</html>

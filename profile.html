@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Тыжпрограммист</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .profile-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #2a2d36;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            color: #c084fc;
+            border-bottom: 2px solid #c084fc;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .order-card, .build-card {
+            background: #15181f;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid #23262e;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #2a2d36;
+        }
+        .order-status {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .order-status.delivered { color: #10b981; }
+        .order-status.processing { color: #f59e0b; }
+        .user-info-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 500px;
+        }
+        .user-info-form input {
+            background: #0a0c10;
+            border: 1px solid #3f434e;
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Тыжпрограммист</a>
+                <ul class="nav-links">
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="configurator.html">Собрать ПК</a></li>
+                    <li><a href="service.html">Сервис</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                </ul>
+                <div class="header-actions">
+                    <button class="icon-btn" id="consultantTrigger">💬</button>
+                    <a href="cart.html" class="icon-btn">🛒 <span class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div style="margin: 30px 0;">
+            <h1 class="section-title" style="margin-top: 0;">Личный кабинет</h1>
+            <div style="background: linear-gradient(135deg, #1e1a2f, #0f0c1a); border-radius: 16px; padding: 24px; margin-bottom: 30px;">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <div style="width: 60px; height: 60px; background: #c084fc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px;">
+                        👤
+                    </div>
+                    <div>
+                        <h2 id="userName">Алексей Программистов</h2>
+                        <p style="color: #9ca3af;">alexey@example.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="orders">📦 История заказов</button>
+                <button class="tab-btn" data-tab="builds">🖥️ Мои сборки ПК</button>
+                <button class="tab-btn" data-tab="repairs">🔧 Заявки на ремонт</button>
+                <button class="tab-btn" data-tab="settings">⚙️ Настройки</button>
+            </div>
+
+            <!-- История заказов -->
+            <div id="orders" class="tab-content active">
+                <div class="order-card">
+                    <div class="order-header">
+                        <strong>Заказ №12345</strong>
+                        <span>15 марта 2025</span>
+                    </div>
+                    <div>Состав: RTX 4070, ASUS ROG Strix, 32GB DDR5</div>
+                    <div>Сумма: 194 980 ₽</div>
+                    <div class="order-status delivered">✅ Доставлен</div>
+                </div>
+                <div class="order-card">
+                    <div class="order-header">
+                        <strong>Заказ №12340</strong>
+                        <span>1 марта 2025</span>
+                    </div>
+                    <div>Состав: Игровая клавиатура HyperX, Мышь Logitech G</div>
+                    <div>Сумма: 12 490 ₽</div>
+                    <div class="order-status processing">🔄 В обработке</div>
+                </div>
+            </div>
+
+            <!-- Мои сборки ПК -->
+            <div id="builds" class="tab-content">
+                <div class="build-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>🎮 Игровая сборка "Ultra"</h3>
+                        <button class="btn-outline" style="padding: 4px 12px;">Опубликовать</button>
+                    </div>
+                    <p>Процессор: Ryzen 7 7800X3D | Видеокарта: RTX 4070 Ti | ОЗУ: 32GB</p>
+                    <p>Итоговая цена: 145 000 ₽</p>
+                    <button class="btn-primary" style="margin-top: 12px;">Купить комплектующие</button>
+                </div>
+                <div class="build-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>💼 Рабочая станция</h3>
+                        <button class="btn-outline" style="padding: 4px 12px;">Опубликовать</button>
+                    </div>
+                    <p>Процессор: Intel i7-13700K | Видеокарта: RTX 4060 | ОЗУ: 64GB</p>
+                    <p>Итоговая цена: 98 500 ₽</p>
+                    <button class="btn-primary" style="margin-top: 12px;">Купить комплектующие</button>
+                </div>
+            </div>
+
+            <!-- Заявки на ремонт -->
+            <div id="repairs" class="tab-content">
+                <div class="order-card">
+                    <div class="order-header">
+                        <strong>Заявка №R001</strong>
+                        <span>10 марта 2025</span>
+                    </div>
+                    <div>Устройство: Ноутбук ASUS</div>
+                    <div>Проблема: Не включается</div>
+                    <div class="order-status delivered">✅ Диагностика завершена</div>
+                    <button class="btn-outline" style="margin-top: 12px;">Отследить статус</button>
+                </div>
+            </div>
+
+            <!-- Настройки уведомлений -->
+            <div id="settings" class="tab-content">
+                <form class="user-info-form">
+                    <h3>Личные данные</h3>
+                    <input type="text" placeholder="Имя" value="Алексей Программистов">
+                    <input type="email" placeholder="Email" value="alexey@example.com">
+                    <input type="tel" placeholder="Телефон" value="+7 (999) 123-45-67">
+                    
+                    <h3 style="margin-top: 20px;">Настройки уведомлений</h3>
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" checked> Получать уведомления о статусе заказа
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" checked> Получать рассылку с акциями
+                    </label>
+                    
+                    <button type="submit" class="btn-primary" style="margin-top: 20px;">Сохранить изменения</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Виджет консультанта -->
+    <div class="consultant-widget" id="consultantWidget">
+        <div class="consultant-btn">💬</div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">Консультант <span id="closeChat" style="cursor:pointer">✖</span></div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Задайте вопрос...">
+                <button id="chatSend" class="btn-primary">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">© 2025 Тыжпрограммист — Ваш проводник в мир технологий</div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Переключение вкладок в личном кабинете
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

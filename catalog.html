@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - Тыжпрограммист</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .category-menu {
+            background: #15181f;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .category-group {
+            margin-bottom: 24px;
+        }
+        
+        .category-group h4 {
+            color: #c084fc;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .category-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .category-link {
+            background: #0a0c10;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            border: 1px solid #2a2d36;
+        }
+        
+        .category-link:hover {
+            background: #c084fc;
+            color: #0a0c10;
+            border-color: #c084fc;
+        }
+        
+        .category-link.active {
+            background: #c084fc;
+            color: #0a0c10;
+            border-color: #c084fc;
+        }
+        
+        .product-card {
+            position: relative;
+        }
+        
+        .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #c084fc;
+            color: #0a0c10;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .stock-status {
+            font-size: 13px;
+            margin: 8px 0;
+        }
+        
+        .in-stock {
+            color: #10b981;
+        }
+        
+        .low-stock {
+            color: #f59e0b;
+        }
+        
+        .out-of-stock {
+            color: #ef4444;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            align-items: center;
+        }
+        
+        .price-input-group {
+            flex: 1;
+        }
+        
+        .price-input-group label {
+            display: block;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+        
+        .price-input-group input {
+            width: 100%;
+            background: #0a0c10;
+            border: 1px solid #3f434e;
+            border-radius: 8px;
+            padding: 8px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .price-input-group input:focus {
+            outline: none;
+            border-color: #c084fc;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Тыжпрограммист</a>
+                <ul class="nav-links">
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="configurator.html">Собрать ПК</a></li>
+                    <li><a href="service.html">Сервис</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                </ul>
+                <div class="header-actions">
+                    <button class="icon-btn" id="consultantTrigger">💬</button>
+                    <a href="cart.html" class="icon-btn">🛒 <span class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div style="display: flex; gap: 30px; margin-top: 30px;">
+            <!-- Боковая панель с фильтрами -->
+            <aside style="width: 280px; flex-shrink: 0;">
+                <div style="background: #15181f; padding: 20px; border-radius: 16px; position: sticky; top: 100px;">
+                    <h3 style="margin-bottom: 16px;">Фильтры</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px;">Цена</label>
+                        <input type="range" id="priceRange" min="0" max="500000" value="500000" style="width:100%; margin: 10px 0;">
+                        <div class="price-inputs">
+                            <div class="price-input-group">
+                                <label>От</label>
+                                <input type="number" id="priceMinInput" value="0" min="0" max="500000">
+                            </div>
+                            <div class="price-input-group">
+                                <label>До</label>
+                                <input type="number" id="priceMaxInput" value="500000" min="0" max="500000">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px;">Бренд</label>
+                        <select id="brandFilter" style="width:100%; background:#0a0c10; color:white; padding:8px; border-radius: 8px;">
+                            <option value="all">Все бренды</option>
+                            <option value="asus">ASUS</option>
+                            <option value="msi">MSI</option>
+                            <option value="gigabyte">Gigabyte</option>
+                            <option value="nvidia">NVIDIA</option>
+                            <option value="intel">Intel</option>
+                            <option value="amd">AMD</option>
+                            <option value="logitech">Logitech</option>
+                            <option value="razer">Razer</option>
+                            <option value="samsung">Samsung</option>
+                            <option value="corsair">Corsair</option>
+                            <option value="kingston">Kingston</option>
+                            <option value="hyperx">HyperX</option>
+                            <option value="steelseries">SteelSeries</option>
+                        </select>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px;">Наличие</label>
+                        <label style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                            <input type="checkbox" id="inStockOnly"> Только в наличии
+                        </label>
+                    </div>
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Сортировка</label>
+                        <select id="sortBy" style="width:100%; background:#0a0c10; color:white; padding:8px; border-radius: 8px;">
+                            <option value="popular">По популярности</option>
+                            <option value="price_asc">По цене (возр.)</option>
+                            <option value="price_desc">По цене (убыв.)</option>
+                            <option value="rating">По рейтингу</option>
+                        </select>
+                    </div>
+                    
+                    <button id="resetFilters" class="btn-outline" style="margin-top: 20px; width: 100%;">Сбросить фильтры</button>
+                </div>
+            </aside>
+            
+            <!-- Основной контент -->
+            <div style="flex:1">
+                <!-- Меню категорий -->
+                <div class="category-menu">
+                    <div class="category-group">
+                        <h4>💻 Компьютерная техника и комплектующие</h4>
+                        <div class="category-links">
+                            <span class="category-link" data-category="notebooks">Ноутбуки</span>
+                            <span class="category-link" data-category="pcs">Системные блоки</span>
+                            <span class="category-link" data-category="monitors">Мониторы</span>
+                            <span class="category-link active" data-category="gpus">Видеокарты</span>
+                            <span class="category-link" data-category="cpus">Процессоры</span>
+                            <span class="category-link" data-category="motherboards">Материнские платы</span>
+                            <span class="category-link" data-category="ram">ОЗУ</span>
+                            <span class="category-link" data-category="storage">SSD/HDD</span>
+                            <span class="category-link" data-category="psus">Блоки питания</span>
+                            <span class="category-link" data-category="cases">Корпуса</span>
+                            <span class="category-link" data-category="cooling">Системы охлаждения</span>
+                        </div>
+                    </div>
+                    
+                    <div class="category-group">
+                        <h4>🎮 Периферия и аксессуары</h4>
+                        <div class="category-links">
+                            <span class="category-link" data-category="keyboards">Клавиатуры</span>
+                            <span class="category-link" data-category="mice">Мыши</span>
+                            <span class="category-link" data-category="mousepads">Коврики</span>
+                            <span class="category-link" data-category="webcams">Веб-камеры</span>
+                            <span class="category-link" data-category="headsets">Наушники/Гарнитуры</span>
+                            <span class="category-link" data-category="speakers">Колонки</span>
+                            <span class="category-link" data-category="network">Сетевое оборудование</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h2 id="categoryTitle">Видеокарты</h2>
+                    <span id="productCount" style="color: #9ca3af;">0 товаров</span>
+                </div>
+                
+                <div id="productsGrid" class="product-grid"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Виджет консультанта -->
+    <div class="consultant-widget" id="consultantWidget">
+        <div class="consultant-btn">💬</div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">Консультант <span id="closeChat" style="cursor:pointer">✖</span></div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Задайте вопрос...">
+                <button id="chatSend" class="btn-primary">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">© 2025 Тыжпрограммист — Ваш проводник в мир технологий</div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Полная база товаров по всем категориям
+        const products = {
+            notebooks: [
+                { id: "nb1", name: "ASUS ROG Strix G16", price: 129990, rating: 4.8, brand: "asus", stock: "in", img: "💻", specs: "Intel i7-13650HX, RTX 4060, 16GB" },
+                { id: "nb2", name: "MSI Katana 15", price: 89990, rating: 4.5, brand: "msi", stock: "in", img: "💻", specs: "Intel i5-13500H, RTX 4050, 16GB" },
+                { id: "nb3", name: "Lenovo Legion Pro 5", price: 114990, rating: 4.7, brand: "lenovo", stock: "low", img: "💻", specs: "Ryzen 7 7745HX, RTX 4060, 32GB" },
+                { id: "nb4", name: "Apple MacBook Pro 14", price: 199990, rating: 4.9, brand: "apple", stock: "in", img: "💻", specs: "M3 Pro, 18GB, 512GB" }
+            ],
+            pcs: [
+                { id: "pc1", name: "Игровой ПК Ultra", price: 89990, rating: 4.6, brand: "msi", stock: "in", img: "🖥️", specs: "Ryzen 5 5600X, RTX 3060, 16GB" },
+                { id: "pc2", name: "Gamer Master X", price: 149990, rating: 4.8, brand: "asus", stock: "in", img: "🖥️", specs: "i7-13700K, RTX 4070, 32GB" },
+                { id: "pc3", name: "Workstation Pro", price: 179990, rating: 4.7, brand: "dell", stock: "low", img: "🖥️", specs: "i9-13900K, RTX 4080, 64GB" }
+            ],
+            monitors: [
+                { id: "mon1", name: "ASUS TUF VG27AQ", price: 34990, rating: 4.7, brand: "asus", stock: "in", img: "🖥️", specs: "27\" 165Hz, 2K, IPS" },
+                { id: "mon2", name: "Samsung Odyssey G7", price: 49990, rating: 4.8, brand: "samsung", stock: "in", img: "🖥️", specs: "32\" 240Hz, 4K, VA" },
+                { id: "mon3", name: "MSI Optix MAG274", price: 27990, rating: 4.5, brand: "msi", stock: "low", img: "🖥️", specs: "27\" 144Hz, 2K, IPS" }
+            ],
+            gpus: [
+                { id: "gpu1", name: "NVIDIA RTX 4070 Ti", price: 84990, rating: 4.9, brand: "nvidia", stock: "in", img: "🎮", specs: "12GB GDDR6X, 7680 CUDA" },
+                { id: "gpu2", name: "NVIDIA RTX 4060 Ti", price: 39990, rating: 4.6, brand: "nvidia", stock: "in", img: "🎮", specs: "8GB GDDR6, 4352 CUDA" },
+                { id: "gpu3", name: "AMD Radeon RX 7900 XT", price: 89990, rating: 4.7, brand: "amd", stock: "low", img: "🎮", specs: "20GB GDDR6, 5376 Stream" },
+                { id: "gpu4", name: "ASUS ROG Strix RTX 4080", price: 129990, rating: 4.9, brand: "asus", stock: "in", img: "🎮", specs: "16GB GDDR6X, 9728 CUDA" },
+                { id: "gpu5", name: "Gigabyte RTX 4090", price: 199990, rating: 5.0, brand: "gigabyte", stock: "low", img: "🎮", specs: "24GB GDDR6X, 16384 CUDA" }
+            ],
+            cpus: [
+                { id: "cpu1", name: "Intel Core i9-14900K", price: 65990, rating: 4.9, brand: "intel", stock: "in", img: "⚙️", specs: "24 ядра, 32 потока, 6.0GHz" },
+                { id: "cpu2", name: "AMD Ryzen 7 7800X3D", price: 45990, rating: 4.8, brand: "amd", stock: "in", img: "⚙️", specs: "8 ядер, 16 потоков, 5.0GHz" },
+                { id: "cpu3", name: "Intel Core i5-14600K", price: 32990, rating: 4.7, brand: "intel", stock: "in", img: "⚙️", specs: "14 ядер, 20 потоков, 5.3GHz" }
+            ],
+            motherboards: [
+                { id: "mb1", name: "ASUS ROG Strix Z790-E", price: 42990, rating: 4.8, brand: "asus", stock: "in", img: "🔌", specs: "LGA1700, DDR5, PCIe 5.0" },
+                { id: "mb2", name: "MSI B760 Tomahawk", price: 18990, rating: 4.6, brand: "msi", stock: "in", img: "🔌", specs: "LGA1700, DDR5, ATX" },
+                { id: "mb3", name: "Gigabyte X670 Aorus", price: 32990, rating: 4.7, brand: "gigabyte", stock: "low", img: "🔌", specs: "AM5, DDR5, PCIe 5.0" }
+            ],
+            ram: [
+                { id: "ram1", name: "Corsair Vengeance 32GB", price: 11990, rating: 4.8, brand: "corsair", stock: "in", img: "💾", specs: "DDR5, 6000MHz, CL30" },
+                { id: "ram2", name: "Kingston Fury 64GB", price: 22990, rating: 4.7, brand: "kingston", stock: "in", img: "💾", specs: "DDR5, 5600MHz, CL36" },
+                { id: "ram3", name: "G.Skill Trident 16GB", price: 6990, rating: 4.6, brand: "gskill", stock: "low", img: "💾", specs: "DDR4, 3600MHz, CL18" }
+            ],
+            storage: [
+                { id: "ssd1", name: "Samsung 990 Pro 1TB", price: 9990, rating: 4.9, brand: "samsung", stock: "in", img: "💽", specs: "NVMe PCIe 4.0, 7450MB/s" },
+                { id: "ssd2", name: "WD Black SN850X 2TB", price: 15990, rating: 4.8, brand: "wd", stock: "in", img: "💽", specs: "NVMe PCIe 4.0, 7300MB/s" },
+                { id: "hdd1", name: "Seagate BarraCuda 4TB", price: 8990, rating: 4.5, brand: "seagate", stock: "in", img: "💽", specs: "7200RPM, 256MB Cache" }
+            ],
+            psus: [
+                { id: "psu1", name: "Corsair RM850e", price: 13990, rating: 4.8, brand: "corsair", stock: "in", img: "⚡", specs: "850W, 80+ Gold, Modular" },
+                { id: "psu2", name: "Seasonic Focus 750W", price: 11990, rating: 4.7, brand: "seasonic", stock: "in", img: "⚡", specs: "750W, 80+ Gold, Full Modular" },
+                { id: "psu3", name: "Be Quiet! 1000W", price: 18990, rating: 4.9, brand: "bequiet", stock: "low", img: "⚡", specs: "1000W, 80+ Platinum" }
+            ],
+            cases: [
+                { id: "case1", name: "NZXT H9 Flow", price: 15990, rating: 4.8, brand: "nzxt", stock: "in", img: "📦", specs: "ATX, Tempered Glass, White" },
+                { id: "case2", name: "Lian Li O11 Dynamic", price: 14990, rating: 4.9, brand: "lianli", stock: "in", img: "📦", specs: "ATX, Dual Chamber" },
+                { id: "case3", name: "Fractal North", price: 13990, rating: 4.7, brand: "fractal", stock: "low", img: "📦", specs: "ATX, Wood Front" }
+            ],
+            cooling: [
+                { id: "cool1", name: "NZXT Kraken Elite 360", price: 24990, rating: 4.8, brand: "nzxt", stock: "in", img: "❄️", specs: "360mm AIO, LCD Display" },
+                { id: "cool2", name: "Noctua NH-D15", price: 9990, rating: 4.9, brand: "noctua", stock: "in", img: "❄️", specs: "Air Cooler, Dual Fan" },
+                { id: "cool3", name: "Arctic Liquid Freezer II", price: 8990, rating: 4.7, brand: "arctic", stock: "low", img: "❄️", specs: "280mm AIO" }
+            ],
+            keyboards: [
+                { id: "kb1", name: "Logitech G Pro X", price: 15990, rating: 4.8, brand: "logitech", stock: "in", img: "⌨️", specs: "Mechanical, TKL, Wireless" },
+                { id: "kb2", name: "Razer BlackWidow V4", price: 17990, rating: 4.7, brand: "razer", stock: "in", img: "⌨️", specs: "Mechanical, RGB, Wrist Rest" },
+                { id: "kb3", name: "Keychron Q1 Pro", price: 18990, rating: 4.9, brand: "keychron", stock: "low", img: "⌨️", specs: "Aluminum, QMK/VIA, Wireless" }
+            ],
+            mice: [
+                { id: "mouse1", name: "Logitech G502 X", price: 8990, rating: 4.8, brand: "logitech", stock: "in", img: "🖱️", specs: "Wireless, 25K Sensor, RGB" },
+                { id: "mouse2", name: "Razer DeathAdder V3", price: 7990, rating: 4.7, brand: "razer", stock: "in", img: "🖱️", specs: "59g, Optical Switches" },
+                { id: "mouse3", name: "SteelSeries Prime", price: 6990, rating: 4.6, brand: "steelseries", stock: "low", img: "🖱️", specs: "Wireless, 18K CPI" }
+            ],
+            mousepads: [
+                { id: "pad1", name: "SteelSeries QcK XXL", price: 3990, rating: 4.7, brand: "steelseries", stock: "in", img: "🧻", specs: "900x400mm, Cloth" },
+                { id: "pad2", name: "Razer Gigantus V2", price: 2990, rating: 4.6, brand: "razer", stock: "in", img: "🧻", specs: "3XL, Textured Surface" },
+                { id: "pad3", name: "Logitech G840", price: 3490, rating: 4.5, brand: "logitech", stock: "low", img: "🧻", specs: "910x400mm" }
+            ],
+            webcams: [
+                { id: "cam1", name: "Logitech Brio 4K", price: 15990, rating: 4.7, brand: "logitech", stock: "in", img: "📷", specs: "4K Ultra HD, HDR" },
+                { id: "cam2", name: "Razer Kiyo Pro", price: 12990, rating: 4.6, brand: "razer", stock: "in", img: "📷", specs: "1080p 60FPS, Adaptive Light" }
+            ],
+            headsets: [
+                { id: "head1", name: "HyperX Cloud Alpha", price: 8990, rating: 4.8, brand: "hyperx", stock: "in", img: "🎧", specs: "Dual Chamber Drivers, Detachable Mic" },
+                { id: "head2", name: "SteelSeries Arctis Nova 7", price: 15990, rating: 4.7, brand: "steelseries", stock: "in", img: "🎧", specs: "Wireless, 2.4GHz + Bluetooth" },
+                { id: "head3", name: "Sony WH-1000XM5", price: 29990, rating: 4.9, brand: "sony", stock: "low", img: "🎧", specs: "Noise Cancelling, 30h Battery" }
+            ],
+            speakers: [
+                { id: "spk1", name: "Edifier R1280DBs", price: 11990, rating: 4.7, brand: "edifier", stock: "in", img: "🔊", specs: "Bluetooth, Optical Input" },
+                { id: "spk2", name: "Logitech Z623", price: 13990, rating: 4.6, brand: "logitech", stock: "in", img: "🔊", specs: "2.1, 200W RMS" }
+            ],
+            network: [
+                { id: "net1", name: "TP-Link Archer AX73", price: 8990, rating: 4.7, brand: "tplink", stock: "in", img: "🌐", specs: "AX5400, 6 Streams" },
+                { id: "net2", name: "ASUS RT-AX86U", price: 15990, rating: 4.8, brand: "asus", stock: "in", img: "🌐", specs: "AX5700, Gaming Router" }
+            ]
+        };
+        
+        let currentCategory = "gpus";
+        let currentFilters = {
+            priceMin: 0,
+            priceMax: 500000,
+            brand: "all",
+            inStockOnly: false,
+            sortBy: "popular"
+        };
+        
+        let currentCategoryProducts = [];
+        
+        function getCategoryTitle(category) {
+            const titles = {
+                notebooks: "Ноутбуки", pcs: "Системные блоки", monitors: "Мониторы", gpus: "Видеокарты",
+                cpus: "Процессоры", motherboards: "Материнские платы", ram: "Оперативная память",
+                storage: "SSD/HDD", psus: "Блоки питания", cases: "Корпуса", cooling: "Системы охлаждения",
+                keyboards: "Клавиатуры", mice: "Мыши", mousepads: "Коврики", webcams: "Веб-камеры",
+                headsets: "Наушники и гарнитуры", speakers: "Колонки", network: "Сетевое оборудование"
+            };
+            return titles[category] || category;
+        }
+        
+        function syncPriceInputs() {
+            document.getElementById('priceRange').value = currentFilters.priceMax;
+            document.getElementById('priceMaxInput').value = currentFilters.priceMax;
+            document.getElementById('priceMinInput').value = currentFilters.priceMin;
+        }
+        
+        function filterProducts() {
+            let productsList = [...currentCategoryProducts];
+            
+            // Фильтр по цене
+            productsList = productsList.filter(p => p.price >= currentFilters.priceMin && p.price <= currentFilters.priceMax);
+            
+            // Фильтр по бренду
+            if (currentFilters.brand !== "all") {
+                productsList = productsList.filter(p => p.brand === currentFilters.brand);
+            }
+            
+            // Фильтр по наличию
+            if (currentFilters.inStockOnly) {
+                productsList = productsList.filter(p => p.stock === "in");
+            }
+            
+            // Сортировка
+            if (currentFilters.sortBy === "price_asc") {
+                productsList.sort((a, b) => a.price - b.price);
+            } else if (currentFilters.sortBy === "price_desc") {
+                productsList.sort((a, b) => b.price - a.price);
+            } else if (currentFilters.sortBy === "rating") {
+                productsList.sort((a, b) => b.rating - a.rating);
+            }
+            
+            return productsList;
+        }
+        
+        function renderProducts() {
+            const filtered = filterProducts();
+            const grid = document.getElementById('productsGrid');
+            const countSpan = document.getElementById('productCount');
+            
+            countSpan.textContent = `${filtered.length} товаров`;
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; padding: 60px; background: #15181f; border-radius: 16px;">Товары не найдены. Попробуйте изменить фильтры.</div>';
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(product => {
+                let stockText = "";
+                let stockClass = "";
+                if (product.stock === "in") {
+                    stockText = "✓ В наличии";
+                    stockClass = "in-stock";
+                } else if (product.stock === "low") {
+                    stockText = "⚠️ Осталось мало";
+                    stockClass = "low-stock";
+                } else {
+                    stockText = "✗ Нет в наличии";
+                    stockClass = "out-of-stock";
+                }
+                
+                return `
+                    <div class="product-card">
+                        ${product.rating >= 4.8 ? '<div class="badge">🔥 Хит</div>' : ''}
+                        <div class="product-img" style="font-size: 48px;">${product.img}</div>
+                        <div class="product-info">
+                            <div class="product-title">${product.name}</div>
+                            <div class="rating">${'★'.repeat(Math.floor(product.rating))}${product.rating % 1 >= 0.5 ? '½' : ''}${'☆'.repeat(5 - Math.ceil(product.rating))} (${product.rating})</div>
+                            <div class="product-price">${product.price.toLocaleString()} ₽</div>
+                            <div class="stock-status ${stockClass}">${stockText}</div>
+                            <div style="font-size: 12px; color: #9ca3af; margin-bottom: 12px;">${product.specs}</div>
+                            ${product.stock !== "out" ? `<button class="btn btn-primary add-to-cart-btn" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}">В корзину</button>` : '<button class="btn-outline" disabled style="opacity: 0.5;">Нет в наличии</button>'}
+                            <button class="btn-outline compare-btn" style="margin-top: 8px;">Сравнить</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Переинициализируем кнопки "В корзину"
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.removeEventListener('click', window.addToCartHandler);
+                const handler = () => {
+                    const id = btn.dataset.id;
+                    const name = btn.dataset.name;
+                    const price = parseInt(btn.dataset.price);
+                    if (window.addToCart) window.addToCart(id, name, price);
+                };
+                btn.addEventListener('click', handler);
+                window.addToCartHandler = handler;
+            });
+        }
+        
+        function updateCategory(category) {
+            currentCategory = category;
+            currentCategoryProducts = [...(products[currentCategory] || [])];
+            
+            document.getElementById('categoryTitle').textContent = getCategoryTitle(category);
+            
+            // Обновляем активный класс в меню
+            document.querySelectorAll('.category-link').forEach(link => {
+                if (link.dataset.category === category) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Сбрасываем фильтры цены, но сохраняем диапазон 0-500000
+            currentFilters.priceMin = 0;
+            currentFilters.priceMax = 500000;
+            currentFilters.brand = "all";
+            currentFilters.inStockOnly = false;
+            
+            // Обновляем UI фильтров
+            syncPriceInputs();
+            document.getElementById('brandFilter').value = "all";
+            document.getElementById('inStockOnly').checked = false;
+            document.getElementById('sortBy').value = "popular";
+            
+            renderProducts();
+        }
+        
+        // Инициализация категорий
+        document.querySelectorAll('.category-link').forEach(link => {
+            link.addEventListener('click', () => {
+                updateCategory(link.dataset.category);
+            });
+        });
+        
+        // Ползунок цены
+        document.getElementById('priceRange').addEventListener('input', (e) => {
+            currentFilters.priceMax = parseInt(e.target.value);
+            if (currentFilters.priceMax < currentFilters.priceMin) {
+                currentFilters.priceMin = currentFilters.priceMax;
+                document.getElementById('priceMinInput').value = currentFilters.priceMin;
+            }
+            syncPriceInputs();
+            renderProducts();
+        });
+        
+        // Ручной ввод минимальной цены
+        document.getElementById('priceMinInput').addEventListener('change', (e) => {
+            let value = parseInt(e.target.value);
+            if (isNaN(value)) value = 0;
+            if (value < 0) value = 0;
+            if (value > currentFilters.priceMax) value = currentFilters.priceMax;
+            currentFilters.priceMin = value;
+            syncPriceInputs();
+            renderProducts();
+        });
+        
+        // Ручной ввод максимальной цены
+        document.getElementById('priceMaxInput').addEventListener('change', (e) => {
+            let value = parseInt(e.target.value);
+            if (isNaN(value)) value = 500000;
+            if (value > 500000) value = 500000;
+            if (value < currentFilters.priceMin) value = currentFilters.priceMin;
+            currentFilters.priceMax = value;
+            syncPriceInputs();
+            renderProducts();
+        });
+        
+        document.getElementById('brandFilter').addEventListener('change', (e) => {
+            currentFilters.brand = e.target.value;
+            renderProducts();
+        });
+        
+        document.getElementById('inStockOnly').addEventListener('change', (e) => {
+            currentFilters.inStockOnly = e.target.checked;
+            renderProducts();
+        });
+        
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+            currentFilters.sortBy = e.target.value;
+            renderProducts();
+        });
+        
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            currentFilters = {
+                priceMin: 0,
+                priceMax: 500000,
+                brand: "all",
+                inStockOnly: false,
+                sortBy: "popular"
+            };
+            
+            syncPriceInputs();
+            document.getElementById('brandFilter').value = "all";
+            document.getElementById('inStockOnly').checked = false;
+            document.getElementById('sortBy').value = "popular";
+            
+            renderProducts();
+        });
+        
+        // Загружаем начальную категорию
+        updateCategory("gpus");
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конфигуратор ПК - Тыжпрограммист</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Тыжпрограммист</a>
+                <ul class="nav-links">
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="configurator.html">Собрать ПК</a></li>
+                    <li><a href="service.html">Сервис</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                </ul>
+                <div class="header-actions">
+                    <button class="icon-btn" id="consultantTrigger">💬</button>
+                    <a href="cart.html" class="icon-btn">🛒 <span class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">Конфигуратор ПК</h1>
+        <p style="margin-bottom: 30px;">Соберите компьютер своей мечты с автоматической проверкой совместимости</p>
+        
+        <div id="configuratorApp">
+            <div class="config-section">
+                <h3>🖥️ Процессор</h3>
+                <select id="cpu" class="component-select">
+                    <option value="35000" data-socket="AM5" data-tdp="105">AMD Ryzen 5 7600X (35 000 ₽, AM5, 105W)</option>
+                    <option value="55000" data-socket="AM5" data-tdp="120">AMD Ryzen 7 7800X3D (55 000 ₽, AM5, 120W)</option>
+                    <option value="40000" data-socket="LGA1700" data-tdp="125">Intel Core i5-13600K (40 000 ₽, LGA1700, 125W)</option>
+                    <option value="65000" data-socket="LGA1700" data-tdp="150">Intel Core i7-13700K (65 000 ₽, LGA1700, 150W)</option>
+                </select>
+                
+                <h3>🔌 Материнская плата</h3>
+                <select id="mb" class="component-select">
+                    <option value="15000" data-socket="AM5">ASUS Prime B650M (15 000 ₽, AM5)</option>
+                    <option value="25000" data-socket="AM5">ROG Strix X670E (25 000 ₽, AM5)</option>
+                    <option value="18000" data-socket="LGA1700">MSI B760 Tomahawk (18 000 ₽, LGA1700)</option>
+                    <option value="28000" data-socket="LGA1700">Gigabyte Z790 Aorus (28 000 ₽, LGA1700)</option>
+                </select>
+                
+                <h3>🎮 Видеокарта</h3>
+                <select id="gpu" class="component-select">
+                    <option value="40000" data-tdp="150">NVIDIA RTX 4060 Ti (40 000 ₽, 150W)</option>
+                    <option value="65000" data-tdp="200">NVIDIA RTX 4070 (65 000 ₽, 200W)</option>
+                    <option value="85000" data-tdp="250">NVIDIA RTX 4070 Ti (85 000 ₽, 250W)</option>
+                    <option value="130000" data-tdp="320">NVIDIA RTX 4080 (130 000 ₽, 320W)</option>
+                </select>
+                
+                <h3>💾 Оперативная память</h3>
+                <select id="ram" class="component-select">
+                    <option value="8000">DDR5 32GB (8 000 ₽)</option>
+                    <option value="15000">DDR5 64GB (15 000 ₽)</option>
+                </select>
+                
+                <h3>⚡ Блок питания</h3>
+                <select id="psu" class="component-select">
+                    <option value="7000">650W (7 000 ₽)</option>
+                    <option value="9000">750W (9 000 ₽)</option>
+                    <option value="12000">850W (12 000 ₽)</option>
+                    <option value="15000">1000W (15 000 ₽)</option>
+                </select>
+            </div>
+            
+            <div class="config-section">
+                <h3>📊 Итоговая смета</h3>
+                <p style="font-size: 32px; font-weight: bold; color: #c084fc;" id="totalPrice">0 ₽</p>
+                
+                <h3>🔧 Рекомендуемая мощность БП</h3>
+                <p id="psuRecommendation" style="color: #f59e0b;">Рассчитывается...</p>
+                
+                <div id="compatibilityMsg" style="padding: 12px; border-radius: 8px; margin: 16px 0;"></div>
+                
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button class="btn-primary" id="saveBuild">💾 Сохранить сборку</button>
+                    <button class="btn-outline" id="shareBuild">📤 Поделиться</button>
+                    <button class="btn-outline" id="addToCartBuild">🛒 Добавить все в корзину</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Виджет консультанта -->
+    <div class="consultant-widget" id="consultantWidget">
+        <div class="consultant-btn">💬</div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">Консультант <span id="closeChat" style="cursor:pointer">✖</span></div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Задайте вопрос...">
+                <button id="chatSend" class="btn-primary">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">© 2025 Тыжпрограммист — Ваш проводник в мир технологий</div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        function calculateTotal() {
+            let total = 0;
+            const components = ['cpu', 'mb', 'gpu', 'ram', 'psu'];
+            components.forEach(id => {
+                const el = document.getElementById(id);
+                total += parseInt(el.value);
+            });
+            return total;
+        }
+        
+        function checkCompatibility() {
+            const cpuSelect = document.getElementById('cpu');
+            const mbSelect = document.getElementById('mb');
+            const cpuSocket = cpuSelect.options[cpuSelect.selectedIndex].dataset.socket;
+            const mbSocket = mbSelect.options[mbSelect.selectedIndex].dataset.socket;
+            const msgDiv = document.getElementById('compatibilityMsg');
+            
+            if (cpuSocket !== mbSocket) {
+                msgDiv.innerHTML = '❌ КРИТИЧЕСКАЯ ОШИБКА: Процессор и материнская плата несовместимы! Разные сокеты.';
+                msgDiv.style.background = '#7f1a1a';
+                msgDiv.style.color = '#fecaca';
+                return false;
+            } else {
+                msgDiv.innerHTML = '✅ Компоненты совместимы!';
+                msgDiv.style.background = '#064e3b';
+                msgDiv.style.color = '#a7f3d0';
+                return true;
+            }
+        }
+        
+        function calculatePSU() {
+            let totalTDP = 0;
+            const cpu = document.getElementById('cpu');
+            const gpu = document.getElementById('gpu');
+            const cpuTDP = parseInt(cpu.options[cpu.selectedIndex].dataset.tdp) || 0;
+            const gpuTDP = parseInt(gpu.options[gpu.selectedIndex].dataset.tdp) || 0;
+            totalTDP = cpuTDP + gpuTDP + 50; // +50W для остальных компонентов
+            
+            let recommended = 500;
+            if (totalTDP <= 400) recommended = 550;
+            else if (totalTDP <= 500) recommended = 650;
+            else if (totalTDP <= 650) recommended = 750;
+            else recommended = 850;
+            
+            document.getElementById('psuRecommendation').innerHTML = `Рекомендуемая мощность: ${recommended}W (Текущее энергопотребление: ~${totalTDP}W)`;
+            return recommended;
+        }
+        
+        function updateConfigurator() {
+            const total = calculateTotal();
+            document.getElementById('totalPrice').innerText = total + ' ₽';
+            checkCompatibility();
+            calculatePSU();
+        }
+        
+        // Добавляем обработчики для всех селектов
+        const selects = ['cpu', 'mb', 'gpu', 'ram', 'psu'];
+        selects.forEach(id => {
+            document.getElementById(id).addEventListener('change', updateConfigurator);
+        });
+        
+        updateConfigurator();
+        
+        document.getElementById('saveBuild').onclick = () => {
+            if(checkCompatibility()) {
+                alert('✅ Сборка сохранена в личном кабинете!');
+            } else {
+                alert('❌ Невозможно сохранить сборку из-за несовместимости компонентов!');
+            }
+        };
+        
+        document.getElementById('shareBuild').onclick = () => {
+            alert('Ссылка на сборку скопирована!');
+        };
+        
+        document.getElementById('addToCartBuild').onclick = () => {
+            if(checkCompatibility()) {
+                const total = calculateTotal();
+                alert(`Все компоненты добавлены в корзину. Итоговая сумма: ${total} ₽`);
+            } else {
+                alert('Невозможно добавить сборку из-за несовместимости!');
+            }
+        };
+    </script>
+</body>
+</html>
