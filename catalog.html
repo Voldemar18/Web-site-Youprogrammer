@@ -389,12 +389,18 @@
         function filterProducts() {
             let productsList = [...currentCategoryProducts];
             
-            // Фильтр по цене
-            productsList = productsList.filter(p => p.price >= currentFilters.priceMin && p.price <= currentFilters.priceMax);
+            // Фильтр по цене (с проверкой на undefined)
+            productsList = productsList.filter(p => {
+                const price = p.price || 0;
+                return price >= (currentFilters.priceMin || 0) && 
+                    price <= (currentFilters.priceMax || 500000);
+            });
             
             // Фильтр по бренду
-            if (currentFilters.brand !== "all") {
-                productsList = productsList.filter(p => p.brand === currentFilters.brand);
+            if (currentFilters.brand && currentFilters.brand !== "all") {
+                productsList = productsList.filter(p => 
+                    p.brand && p.brand.toLowerCase() === currentFilters.brand.toLowerCase()
+                );
             }
             
             // Фильтр по наличию
@@ -404,15 +410,106 @@
             
             // Сортировка
             if (currentFilters.sortBy === "price_asc") {
-                productsList.sort((a, b) => a.price - b.price);
+                productsList.sort((a, b) => (a.price || 0) - (b.price || 0));
             } else if (currentFilters.sortBy === "price_desc") {
-                productsList.sort((a, b) => b.price - a.price);
+                productsList.sort((a, b) => (b.price || 0) - (a.price || 0));
             } else if (currentFilters.sortBy === "rating") {
-                productsList.sort((a, b) => b.rating - a.rating);
+                productsList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
             }
             
             return productsList;
         }
+
+// Дополнительная функция для применения фильтров и обновления UI
+function applyFiltersAndRender() {
+    const filtered = filterProducts();
+    const grid = document.getElementById('productsGrid');
+    const countSpan = document.getElementById('productCount');
+    
+    if (!grid) return;
+    
+    countSpan.textContent = `${filtered.length} товаров`;
+    
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div style="text-align: center; padding: 60px; background: #15181f; border-radius: 16px;">🔍 Товары не найдены. Попробуйте изменить фильтры.</div>';
+        return;
+    }
+    
+    grid.innerHTML = filtered.map(product => {
+        let stockText = "";
+        let stockClass = "";
+        if (product.stock === "in") {
+            stockText = "✅ В наличии";
+            stockClass = "in-stock";
+        } else if (product.stock === "low") {
+            stockText = "⚠️ Осталось мало";
+            stockClass = "low-stock";
+        } else {
+            stockText = "❌ Нет в наличии";
+            stockClass = "out-of-stock";
+        }
+        
+        // Экранируем название товара
+        const safeName = escapeHtml(product.name);
+        const safeSpecs = escapeHtml(product.specs || '');
+        
+        return `
+            <div class="product-card">
+                ${product.rating >= 4.8 ? '<div class="badge">🔥 Хит</div>' : ''}
+                <div class="product-img" style="font-size: 48px;">${product.img || '📦'}</div>
+                <div class="product-info">
+                    <div class="product-title">${safeName}</div>
+                    <div class="rating">${'★'.repeat(Math.floor(product.rating || 0))}${(product.rating || 0) % 1 >= 0.5 ? '½' : ''}${'☆'.repeat(5 - Math.ceil(product.rating || 0))} (${product.rating || 0})</div>
+                    <div class="product-price">${(product.price || 0).toLocaleString()} ₽</div>
+                    <div class="stock-status ${stockClass}">${stockText}</div>
+                    <div style="font-size: 12px; color: #9ca3af; margin-bottom: 12px;">${safeSpecs}</div>
+                    ${product.stock !== "out" ? 
+                        `<button class="btn btn-primary add-to-cart-btn" data-id="${product.id}" data-name="${safeName}" data-price="${product.price || 0}">🛒 В корзину</button>` : 
+                        '<button class="btn btn-outline" disabled style="opacity: 0.5;">❌ Нет в наличии</button>'}
+                    <button class="btn btn-outline btn-sm compare-btn" style="margin-top: 8px;">📊 Сравнить</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Переинициализируем кнопки "В корзину"
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.removeEventListener('click', window.addToCartHandler);
+        const handler = () => {
+            const id = btn.dataset.id;
+            const name = btn.dataset.name;
+            const price = parseInt(btn.dataset.price);
+            if (typeof addToCart === 'function') {
+                addToCart(id, name, price);
+            } else if (typeof window.addToCart === 'function') {
+                window.addToCart(id, name, price);
+            } else {
+                // Fallback: сохраняем напрямую в localStorage
+                let cart = JSON.parse(localStorage.getItem('techCart') || '[]');
+                const existing = cart.find(item => item.id === id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ id: id, name: name, price: price, quantity: 1 });
+                }
+                localStorage.setItem('techCart', JSON.stringify(cart));
+                alert(`${name} добавлен в корзину`);
+                
+                // Обновляем счетчик
+                const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const cartCounters = document.querySelectorAll('.cart-count');
+                cartCounters.forEach(el => {
+                    if (el) {
+                        el.textContent = totalCount;
+                        el.style.display = totalCount > 0 ? 'flex' : 'none';
+                    }
+                });
+            }
+        };
+        btn.addEventListener('click', handler);
+        window.addToCartHandler = handler;
+    });
+}
         
         function renderProducts() {
             const filtered = filterProducts();

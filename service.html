@@ -2,18 +2,440 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Сервисный центр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сервисный центр - Тыжпрограммист</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .service-card {
+            background: #15181f;
+            border-radius: 24px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .service-form-group {
+            margin-bottom: 20px;
+        }
+        
+        .service-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #c084fc;
+            font-weight: 500;
+        }
+        
+        .service-form-group input,
+        .service-form-group select,
+        .service-form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0a0c10;
+            border: 1px solid #3f434e;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .service-form-group input:focus,
+        .service-form-group select:focus,
+        .service-form-group textarea:focus {
+            outline: none;
+            border-color: #c084fc;
+        }
+        
+        .service-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .service-price {
+            background: linear-gradient(135deg, #1e1a2f, #0f0c1a);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .service-price .price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #c084fc;
+        }
+        
+        .success-message {
+            background: #064e3b;
+            color: #a7f3d0;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-message {
+            background: #7f1a1a;
+            color: #fecaca;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .repair-types {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .repair-type {
+            background: #0a0c10;
+            border: 1px solid #3f434e;
+            border-radius: 30px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .repair-type:hover {
+            border-color: #c084fc;
+        }
+        
+        .repair-type.active {
+            background: #c084fc;
+            color: #0a0c10;
+            border-color: #c084fc;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">...</header>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Тыжпрограммист</a>
+                <ul class="nav-links">
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="configurator.html">Собрать ПК</a></li>
+                    <li><a href="service.html">Сервис</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                </ul>
+                <div class="header-actions">
+                    <button class="icon-btn" id="consultantTrigger">💬</button>
+                    <a href="cart.html" class="icon-btn">🛒 <span class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <main class="container">
-        <h1>Заявка на ремонт</h1>
-        <form style="background:#15181f; padding:30px; border-radius:24px; margin:20px 0;">
-            <input type="text" placeholder="Тип техники (ноутбук, ПК)" style="width:100%; padding:12px; margin-bottom:12px; background:#0a0c10; border:1px solid #3f434e; color:white;">
-            <textarea placeholder="Описание проблемы" rows="4" style="width:100%; background:#0a0c10; color:white;"></textarea>
-            <button class="btn-primary" style="margin-top:16px;">Отправить заявку</button>
-        </form>
+        <div style="margin: 30px 0;">
+            <!-- Хлебные крошки -->
+            <div style="margin-bottom: 20px; font-size: 14px; color: #9ca3af;">
+                <a href="index.html" style="color: #9ca3af; text-decoration: none;">Главная</a> / <span style="color: #c084fc;">Сервисный центр</span>
+            </div>
+            
+            <h1 class="section-title" style="margin-top: 0;">🔧 Сервисный центр</h1>
+            <p style="margin-bottom: 30px;">Профессиональный ремонт компьютерной техники с гарантией до 12 месяцев</p>
+            
+            <!-- Преимущества -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px;">
+                <div style="background: #15181f; border-radius: 16px; padding: 20px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">⚡</div>
+                    <div style="font-weight: bold;">Бесплатная диагностика</div>
+                    <div style="font-size: 13px; color: #9ca3af;">При последующем ремонте</div>
+                </div>
+                <div style="background: #15181f; border-radius: 16px; padding: 20px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
+                    <div style="font-weight: bold;">Гарантия до 12 месяцев</div>
+                    <div style="font-size: 13px; color: #9ca3af;">На все работы</div>
+                </div>
+                <div style="background: #15181f; border-radius: 16px; padding: 20px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🚀</div>
+                    <div style="font-weight: bold;">Срочный ремонт</div>
+                    <div style="font-size: 13px; color: #9ca3af;">от 2 часов</div>
+                </div>
+                <div style="background: #15181f; border-radius: 16px; padding: 20px; text-align: center;">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🔧</div>
+                    <div style="font-weight: bold;">Оригинальные запчасти</div>
+                    <div style="font-size: 13px; color: #9ca3af;">От производителей</div>
+                </div>
+            </div>
+            
+            <div class="service-card">
+                <h2 style="margin-bottom: 24px;">📝 Заявка на ремонт</h2>
+                
+                <div id="successMsg" class="success-message">
+                    ✅ Заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.
+                </div>
+                <div id="errorMsg" class="error-message">
+                    ❌ Пожалуйста, заполните все обязательные поля.
+                </div>
+                
+                <form id="repairForm">
+                    <div class="service-form-row">
+                        <div class="service-form-group">
+                            <label>Тип техники *</label>
+                            <select id="deviceType" required>
+                                <option value="">Выберите тип устройства</option>
+                                <option value="pc">Настольный ПК / Системный блок</option>
+                                <option value="laptop">Ноутбук</option>
+                                <option value="macbook">MacBook</option>
+                                <option value="monitor">Монитор</option>
+                                <option value="videocard">Видеокарта</option>
+                                <option value="motherboard">Материнская плата</option>
+                                <option value="psu">Блок питания</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        <div class="service-form-group">
+                            <label>Бренд *</label>
+                            <select id="brand" required>
+                                <option value="">Выберите бренд</option>
+                                <option>ASUS</option>
+                                <option>MSI</option>
+                                <option>Gigabyte</option>
+                                <option>Lenovo</option>
+                                <option>HP</option>
+                                <option>Acer</option>
+                                <option>Dell</option>
+                                <option>Apple</option>
+                                <option>Samsung</option>
+                                <option>Другой</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="service-form-row">
+                        <div class="service-form-group">
+                            <label>Модель устройства</label>
+                            <input type="text" id="model" placeholder="Например: ROG Strix G16, IdeaPad 3...">
+                        </div>
+                        <div class="service-form-group">
+                            <label>Контактный телефон *</label>
+                            <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" required>
+                        </div>
+                    </div>
+                    
+                    <div class="service-form-group">
+                        <label>Тип неисправности *</label>
+                        <div class="repair-types">
+                            <span class="repair-type" data-problem="not_power">Не включается</span>
+                            <span class="repair-type" data-problem="no_screen">Нет изображения</span>
+                            <span class="repair-type" data-problem="overheat">Перегрев</span>
+                            <span class="repair-type" data-problem="slow">Тормозит/Зависает</span>
+                            <span class="repair-type" data-problem="blue_screen">Синий экран</span>
+                            <span class="repair-type" data-problem="no_sound">Нет звука</span>
+                            <span class="repair-type" data-problem="usb">Не работают порты</span>
+                            <span class="repair-type" data-problem="battery">Не держит батарею</span>
+                        </div>
+                        <input type="hidden" id="problemType" value="">
+                    </div>
+                    
+                    <div class="service-form-group">
+                        <label>Подробное описание проблемы</label>
+                        <textarea id="description" rows="4" placeholder="Опишите проблему подробнее... Например: 'После падения перестал включаться, при подключении зарядки индикатор не горит'"></textarea>
+                    </div>
+                    
+                    <div class="service-form-group">
+                        <label>Удобное время для связи</label>
+                        <select id="contactTime">
+                            <option value="any">В любое время</option>
+                            <option value="morning">09:00 - 12:00</option>
+                            <option value="day">12:00 - 15:00</option>
+                            <option value="evening">15:00 - 18:00</option>
+                            <option value="after18">После 18:00</option>
+                        </select>
+                    </div>
+                    
+                    <div class="service-price">
+                        <div style="margin-bottom: 8px;">💰 Ориентировочная стоимость ремонта</div>
+                        <div class="price" id="estimatedPrice">от 1 500 ₽</div>
+                        <div style="font-size: 12px; color: #9ca3af; margin-top: 8px;">Точная стоимость после диагностики</div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 16px; margin-top: 24px;">
+                        <button type="submit" class="btn btn-primary btn-lg">📨 Отправить заявку</button>
+                        <button type="button" id="resetFormBtn" class="btn btn-outline btn-lg">🗑 Очистить форму</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Часто задаваемые вопросы -->
+            <div class="service-card">
+                <h2 style="margin-bottom: 20px;">❓ Часто задаваемые вопросы</h2>
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div>
+                        <div style="font-weight: bold; color: #c084fc;">Сколько времени занимает диагностика?</div>
+                        <div style="font-size: 14px; color: #9ca3af;">Бесплатная диагностика занимает от 30 минут до 2 часов в зависимости от сложности.</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; color: #c084fc;">Даете ли вы гарантию на ремонт?</div>
+                        <div style="font-size: 14px; color: #9ca3af;">Да, гарантия от 3 до 12 месяцев в зависимости от вида выполненных работ.</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; color: #c084fc;">Можно ли забрать технику курьером?</div>
+                        <div style="font-size: 14px; color: #9ca3af;">Да, мы осуществляем бесплатную курьерскую доставку по городу при ремонте от 5000 ₽.</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; color: #c084fc;">Есть ли срочный ремонт?</div>
+                        <div style="font-size: 14px; color: #9ca3af;">Да, срочный ремонт выполняется от 2 часов с доплатой 30% от стоимости работ.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Виджет консультанта -->
+    <div class="consultant-widget" id="consultantWidget">
+        <div class="consultant-btn">💬</div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">Консультант <span id="closeChat" style="cursor:pointer">✖</span></div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Задайте вопрос...">
+                <button id="chatSend" class="btn-primary">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">© 2025 Тыжпрограммист — Ваш проводник в мир технологий</div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Калькулятор ориентировочной стоимости
+        function updateEstimatedPrice() {
+            const deviceType = document.getElementById('deviceType').value;
+            const problemInput = document.getElementById('problemType');
+            const problem = problemInput ? problemInput.value : '';
+            
+            let basePrice = 1500;
+            
+            const devicePrices = {
+                'pc': 0,
+                'laptop': 500,
+                'macbook': 1000,
+                'monitor': 300,
+                'videocard': 800,
+                'motherboard': 600,
+                'psu': 400,
+                'other': 0
+            };
+            
+            const problemPrices = {
+                'not_power': 800,
+                'no_screen': 1200,
+                'overheat': 1500,
+                'slow': 1000,
+                'blue_screen': 1300,
+                'no_sound': 600,
+                'usb': 500,
+                'battery': 1800
+            };
+            
+            basePrice += devicePrices[deviceType] || 0;
+            basePrice += problemPrices[problem] || 0;
+            
+            if (basePrice < 1500) basePrice = 1500;
+            
+            document.getElementById('estimatedPrice').innerHTML = `от ${basePrice.toLocaleString()} ₽`;
+        }
+        
+        // Обработка выбора типа неисправности
+        document.querySelectorAll('.repair-type').forEach(el => {
+            el.addEventListener('click', () => {
+                // Убираем активный класс у всех
+                document.querySelectorAll('.repair-type').forEach(e => e.classList.remove('active'));
+                el.classList.add('active');
+                document.getElementById('problemType').value = el.dataset.problem;
+                updateEstimatedPrice();
+            });
+        });
+        
+        // Обновление цены при смене типа устройства
+        document.getElementById('deviceType').addEventListener('change', updateEstimatedPrice);
+        
+        // Обработка отправки формы
+        document.getElementById('repairForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const deviceType = document.getElementById('deviceType').value;
+            const brand = document.getElementById('brand').value;
+            const phone = document.getElementById('phone').value;
+            const problemType = document.getElementById('problemType').value;
+            
+            if (!deviceType || !brand || !phone || !problemType) {
+                const errorMsg = document.getElementById('errorMsg');
+                errorMsg.style.display = 'block';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            // Сохраняем заявку в localStorage
+            const applications = JSON.parse(localStorage.getItem('repairApplications') || '[]');
+            const newApplication = {
+                id: 'R' + Date.now(),
+                date: new Date().toLocaleDateString('ru-RU'),
+                deviceType: deviceType,
+                brand: brand,
+                model: document.getElementById('model').value,
+                phone: phone,
+                problem: problemType,
+                description: document.getElementById('description').value,
+                status: 'new'
+            };
+            applications.unshift(newApplication);
+            localStorage.setItem('repairApplications', JSON.stringify(applications));
+            
+            // Показываем успех и сбрасываем форму
+            const successMsg = document.getElementById('successMsg');
+            successMsg.style.display = 'block';
+            
+            // Сброс формы
+            document.getElementById('repairForm').reset();
+            document.getElementById('problemType').value = '';
+            document.querySelectorAll('.repair-type').forEach(e => e.classList.remove('active'));
+            updateEstimatedPrice();
+            
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 4000);
+        });
+        
+        // Кнопка сброса формы
+        document.getElementById('resetFormBtn').addEventListener('click', () => {
+            document.getElementById('repairForm').reset();
+            document.getElementById('problemType').value = '';
+            document.querySelectorAll('.repair-type').forEach(e => e.classList.remove('active'));
+            updateEstimatedPrice();
+        });
+        
+        // Маска для телефона (простая)
+        document.getElementById('phone').addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.startsWith('7') || value.startsWith('8')) {
+                let formatted = '+7 ';
+                if (value.length > 1) formatted += '(' + value.slice(1, 4);
+                if (value.length > 4) formatted += ') ' + value.slice(4, 7);
+                if (value.length > 7) formatted += '-' + value.slice(7, 9);
+                if (value.length > 9) formatted += '-' + value.slice(9, 11);
+                e.target.value = formatted;
+            }
+        });
+        
+        // Инициализация
+        updateEstimatedPrice();
+        
+        // Подключаем консультанта (если main.js его инициализирует)
+        if (typeof initConsultant === 'function') {
+            initConsultant();
+        }
+    </script>
 </body>
 </html>

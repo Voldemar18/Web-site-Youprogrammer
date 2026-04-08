@@ -102,37 +102,150 @@ body {
     justify-content: center;
 }
 
-/* Buttons */
+
+/* Базовая кнопка */
 .btn {
-    padding: 8px 16px;
-    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 12px;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
     font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Главная кнопка (градиент) */
 .btn-primary {
     background: linear-gradient(135deg, #c084fc, #60a5fa);
     color: #111317;
+    box-shadow: 0 2px 8px rgba(96, 165, 250, 0.2);
 }
 
 .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(96, 165, 250, 0.4);
+    background: linear-gradient(135deg, #d094fc, #70b5fa);
 }
 
+.btn-primary:active {
+    transform: translateY(0px);
+}
+
+/* Вторичная кнопка (обводка) */
 .btn-outline {
     background: transparent;
-    border: 1px solid #3f434e;
+    border: 1.5px solid #3f434e;
     color: #e4e6eb;
 }
 
 .btn-outline:hover {
     border-color: #c084fc;
     color: #c084fc;
+    background: rgba(192, 132, 252, 0.1);
+    transform: translateY(-1px);
 }
+
+.btn-outline:active {
+    transform: translateY(0px);
+}
+
+/* Опасная кнопка (удаление) */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* Маленькая кнопка */
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+}
+
+/* Большая кнопка */
+.btn-lg {
+    padding: 14px 32px;
+    font-size: 16px;
+    border-radius: 16px;
+}
+
+/* Кнопка с иконкой */
+.btn-icon {
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.btn-icon svg, .btn-icon span {
+    font-size: 18px;
+}
+
+/* Эффект пульсации при клике */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::after {
+    width: 200px;
+    height: 200px;
+}
+
+/* Отключенная кнопка */
+.btn:disabled, .btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Ссылка как кнопка */
+.btn-link {
+    background: none;
+    border: none;
+    color: #c084fc;
+    text-decoration: underline;
+    padding: 8px 12px;
+}
+
+.btn-link:hover {
+    color: #60a5fa;
+}
+
+/* Кнопка с иконкой влево/вправо */
+.btn-icon-left {
+    flex-direction: row;
+}
+
+.btn-icon-right {
+    flex-direction: row-reverse;
+}
+
+/* ===== КОНЕЦ УЛУЧШЕННЫХ КНОПОК ===== */
 
 /* Cards */
 .section-title {
@@ -268,6 +381,11 @@ body {
     border-radius: 20px;
     padding: 8px 12px;
     color: white;
+}
+
+.chat-input-area button {
+    padding: 8px 16px;
+    border-radius: 20px;
 }
 
 /* Configurator Styles */

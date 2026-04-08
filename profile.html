@@ -12,6 +12,7 @@
             margin-bottom: 30px;
             border-bottom: 1px solid #2a2d36;
             padding-bottom: 10px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             background: none;
@@ -21,6 +22,11 @@
             cursor: pointer;
             font-size: 16px;
             transition: all 0.2s;
+            border-radius: 8px;
+        }
+        .tab-btn:hover {
+            background: #2a2d36;
+            color: #c084fc;
         }
         .tab-btn.active {
             color: #c084fc;
@@ -38,6 +44,11 @@
             padding: 20px;
             margin-bottom: 16px;
             border: 1px solid #23262e;
+            transition: transform 0.2s;
+        }
+        .order-card:hover, .build-card:hover {
+            transform: translateY(-2px);
+            border-color: #c084fc;
         }
         .order-header {
             display: flex;
@@ -65,6 +76,38 @@
             padding: 12px;
             color: white;
         }
+        .user-info-form input:focus {
+            outline: none;
+            border-color: #c084fc;
+        }
+        .build-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            background: #15181f;
+            border-left: 4px solid #c084fc;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -90,7 +133,7 @@
         <div style="margin: 30px 0;">
             <h1 class="section-title" style="margin-top: 0;">Личный кабинет</h1>
             <div style="background: linear-gradient(135deg, #1e1a2f, #0f0c1a); border-radius: 16px; padding: 24px; margin-bottom: 30px;">
-                <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
                     <div style="width: 60px; height: 60px; background: #c084fc; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px;">
                         👤
                     </div>
@@ -118,6 +161,7 @@
                     <div>Состав: RTX 4070, ASUS ROG Strix, 32GB DDR5</div>
                     <div>Сумма: 194 980 ₽</div>
                     <div class="order-status delivered">✅ Доставлен</div>
+                    <button class="btn btn-outline btn-sm order-repeat-btn" style="margin-top: 12px;" data-order="12345">🔄 Повторить заказ</button>
                 </div>
                 <div class="order-card">
                     <div class="order-header">
@@ -127,28 +171,35 @@
                     <div>Состав: Игровая клавиатура HyperX, Мышь Logitech G</div>
                     <div>Сумма: 12 490 ₽</div>
                     <div class="order-status processing">🔄 В обработке</div>
+                    <button class="btn btn-outline btn-sm order-repeat-btn" style="margin-top: 12px;" data-order="12340">🔄 Повторить заказ</button>
                 </div>
             </div>
 
             <!-- Мои сборки ПК -->
             <div id="builds" class="tab-content">
                 <div class="build-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <h3>🎮 Игровая сборка "Ultra"</h3>
-                        <button class="btn-outline" style="padding: 4px 12px;">Опубликовать</button>
+                        <span class="build-price" style="color: #c084fc; font-weight: bold;">145 000 ₽</span>
                     </div>
                     <p>Процессор: Ryzen 7 7800X3D | Видеокарта: RTX 4070 Ti | ОЗУ: 32GB</p>
-                    <p>Итоговая цена: 145 000 ₽</p>
-                    <button class="btn-primary" style="margin-top: 12px;">Купить комплектующие</button>
+                    <div class="build-actions">
+                        <button class="btn btn-outline btn-sm publish-build-btn" data-build="ultra">📢 Опубликовать</button>
+                        <button class="btn btn-primary btn-sm buy-build-btn" data-build="ultra" data-price="145000">🛒 Купить комплектующие</button>
+                        <button class="btn btn-outline btn-sm edit-build-btn" data-build="ultra">✏️ Редактировать</button>
+                    </div>
                 </div>
                 <div class="build-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                         <h3>💼 Рабочая станция</h3>
-                        <button class="btn-outline" style="padding: 4px 12px;">Опубликовать</button>
+                        <span class="build-price" style="color: #c084fc; font-weight: bold;">98 500 ₽</span>
                     </div>
                     <p>Процессор: Intel i7-13700K | Видеокарта: RTX 4060 | ОЗУ: 64GB</p>
-                    <p>Итоговая цена: 98 500 ₽</p>
-                    <button class="btn-primary" style="margin-top: 12px;">Купить комплектующие</button>
+                    <div class="build-actions">
+                        <button class="btn btn-outline btn-sm publish-build-btn" data-build="workstation">📢 Опубликовать</button>
+                        <button class="btn btn-primary btn-sm buy-build-btn" data-build="workstation" data-price="98500">🛒 Купить комплектующие</button>
+                        <button class="btn btn-outline btn-sm edit-build-btn" data-build="workstation">✏️ Редактировать</button>
+                    </div>
                 </div>
             </div>
 
@@ -159,30 +210,49 @@
                         <strong>Заявка №R001</strong>
                         <span>10 марта 2025</span>
                     </div>
-                    <div>Устройство: Ноутбук ASUS</div>
+                    <div>Устройство: Ноутбук ASUS ROG Strix</div>
                     <div>Проблема: Не включается</div>
                     <div class="order-status delivered">✅ Диагностика завершена</div>
-                    <button class="btn-outline" style="margin-top: 12px;">Отследить статус</button>
+                    <div class="build-actions" style="margin-top: 12px;">
+                        <button class="btn btn-outline btn-sm track-repair-btn" data-repair="R001">📊 Отследить статус</button>
+                        <button class="btn btn-outline btn-sm repeat-repair-btn" data-repair="R001">🔄 Оставить повторную заявку</button>
+                    </div>
+                </div>
+                <div class="order-card">
+                    <div class="order-header">
+                        <strong>Заявка №R002</strong>
+                        <span>5 марта 2025</span>
+                    </div>
+                    <div>Устройство: Видеокарта RTX 4070</div>
+                    <div>Проблема: Перегрев, артефакты</div>
+                    <div class="order-status processing">🔄 В работе</div>
+                    <div class="build-actions" style="margin-top: 12px;">
+                        <button class="btn btn-outline btn-sm track-repair-btn" data-repair="R002">📊 Отследить статус</button>
+                        <button class="btn btn-outline btn-sm repeat-repair-btn" data-repair="R002">🔄 Оставить повторную заявку</button>
+                    </div>
                 </div>
             </div>
 
             <!-- Настройки уведомлений -->
             <div id="settings" class="tab-content">
-                <form class="user-info-form">
+                <form class="user-info-form" id="settingsForm">
                     <h3>Личные данные</h3>
-                    <input type="text" placeholder="Имя" value="Алексей Программистов">
-                    <input type="email" placeholder="Email" value="alexey@example.com">
-                    <input type="tel" placeholder="Телефон" value="+7 (999) 123-45-67">
+                    <input type="text" id="settingsName" placeholder="Имя" value="Алексей Программистов">
+                    <input type="email" id="settingsEmail" placeholder="Email" value="alexey@example.com">
+                    <input type="tel" id="settingsPhone" placeholder="Телефон" value="+7 (999) 123-45-67">
                     
                     <h3 style="margin-top: 20px;">Настройки уведомлений</h3>
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" checked> Получать уведомления о статусе заказа
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="notifyOrders" checked> Получать уведомления о статусе заказа
                     </label>
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" checked> Получать рассылку с акциями
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="notifyPromo" checked> Получать рассылку с акциями
                     </label>
                     
-                    <button type="submit" class="btn-primary" style="margin-top: 20px;">Сохранить изменения</button>
+                    <div style="display: flex; gap: 12px; margin-top: 20px;">
+                        <button type="submit" class="btn btn-primary">💾 Сохранить изменения</button>
+                        <button type="button" id="resetSettingsBtn" class="btn btn-outline">↺ Сбросить</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -196,7 +266,7 @@
             <div id="chatMessages" class="chat-messages"></div>
             <div class="chat-input-area">
                 <input type="text" id="chatInput" placeholder="Задайте вопрос...">
-                <button id="chatSend" class="btn-primary">➤</button>
+                <button id="chatSend" class="btn btn-primary btn-sm">➤</button>
             </div>
         </div>
     </div>
@@ -207,18 +277,208 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Переключение вкладок в личном кабинете
+        // Функция для показа уведомлений
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.style.borderLeftColor = type === 'success' ? '#10b981' : '#c084fc';
+            toast.innerHTML = `${type === 'success' ? '✅' : 'ℹ️'} ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Добавляем стиль для исчезновения
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Переключение вкладок
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabId = btn.dataset.tab;
-                
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
             });
         });
+
+        // === ОБРАБОТЧИКИ ДЛЯ КНОПОК В СБОРКАХ ===
+        
+        // Кнопка "Опубликовать сборку"
+        document.querySelectorAll('.publish-build-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const buildName = btn.dataset.build;
+                const buildCard = btn.closest('.build-card');
+                const buildTitle = buildCard.querySelector('h3').innerText;
+                
+                // Имитация публикации
+                showToast(`📢 Сборка "${buildTitle}" опубликована в галерее!`, 'success');
+                
+                // Меняем текст кнопки
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Опубликовано';
+                btn.disabled = true;
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 3000);
+            });
+        });
+        
+        // Кнопка "Купить комплектующие"
+        document.querySelectorAll('.buy-build-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const buildName = btn.dataset.build;
+                const price = parseInt(btn.dataset.price);
+                const buildCard = btn.closest('.build-card');
+                const buildTitle = buildCard.querySelector('h3').innerText;
+                
+                // Добавляем сборку в корзину
+                let cart = JSON.parse(localStorage.getItem('techCart') || '[]');
+                
+                // Проверяем, есть ли уже такая сборка в корзине
+                const existing = cart.find(item => item.id === `build_${buildName}`);
+                if (existing) {
+                    existing.quantity += 1;
+                    showToast(`🛒 "${buildTitle}" добавлена в корзину (теперь ${existing.quantity} шт.)`, 'success');
+                } else {
+                    cart.push({ 
+                        id: `build_${buildName}`, 
+                        name: `Сборка ПК: ${buildTitle}`, 
+                        price: price, 
+                        quantity: 1 
+                    });
+                    showToast(`🛒 Сборка "${buildTitle}" добавлена в корзину за ${price.toLocaleString()} ₽`, 'success');
+                }
+                
+                localStorage.setItem('techCart', JSON.stringify(cart));
+                
+                // Обновляем счетчик корзины
+                if (typeof updateCartUI === 'function') {
+                    updateCartUI();
+                } else {
+                    const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+                    document.querySelectorAll('.cart-count').forEach(el => {
+                        if (el) {
+                            el.textContent = totalCount;
+                            el.style.display = totalCount > 0 ? 'flex' : 'none';
+                        }
+                    });
+                }
+                
+                // Анимация кнопки
+                btn.innerHTML = '✅ Добавлено!';
+                setTimeout(() => {
+                    btn.innerHTML = '🛒 Купить комплектующие';
+                }, 2000);
+            });
+        });
+        
+        // Кнопка "Редактировать сборку"
+        document.querySelectorAll('.edit-build-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const buildName = btn.dataset.build;
+                showToast(`✏️ Редактирование сборки "${buildName}" откроется в конфигураторе`, 'info');
+                // В реальном проекте здесь был бы переход на configurator.html с параметрами
+            });
+        });
+        
+        // === ОБРАБОТЧИКИ ДЛЯ ЗАКАЗОВ ===
+        document.querySelectorAll('.order-repeat-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const orderId = btn.dataset.order;
+                showToast(`🔄 Заказ №${orderId} добавлен в корзину для повторного оформления`, 'success');
+            });
+        });
+        
+        // === ОБРАБОТЧИКИ ДЛЯ ЗАЯВОК НА РЕМОНТ ===
+        document.querySelectorAll('.track-repair-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const repairId = btn.dataset.repair;
+                showToast(`📊 Статус заявки ${repairId}: Диагностика завершена, ожидает ремонта`, 'info');
+            });
+        });
+        
+        document.querySelectorAll('.repeat-repair-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const repairId = btn.dataset.repair;
+                showToast(`🔄 Повторная заявка на ремонт создана. С вами свяжется менеджер`, 'success');
+                // Перенаправление на страницу сервиса
+                setTimeout(() => {
+                    if (confirm('Перейти на страницу сервиса для оформления заявки?')) {
+                        window.location.href = 'service.html';
+                    }
+                }, 500);
+            });
+        });
+        
+        // === НАСТРОЙКИ ===
+        const settingsForm = document.getElementById('settingsForm');
+        if (settingsForm) {
+            settingsForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('settingsName').value;
+                const email = document.getElementById('settingsEmail').value;
+                const phone = document.getElementById('settingsPhone').value;
+                const notifyOrders = document.getElementById('notifyOrders').checked;
+                const notifyPromo = document.getElementById('notifyPromo').checked;
+                
+                // Сохраняем в localStorage
+                const settings = { name, email, phone, notifyOrders, notifyPromo };
+                localStorage.setItem('userSettings', JSON.stringify(settings));
+                
+                // Обновляем отображаемое имя
+                document.getElementById('userName').innerText = name;
+                
+                showToast('✅ Настройки успешно сохранены!', 'success');
+            });
+        }
+        
+        // Кнопка сброса настроек
+        const resetBtn = document.getElementById('resetSettingsBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', () => {
+                document.getElementById('settingsName').value = 'Алексей Программистов';
+                document.getElementById('settingsEmail').value = 'alexey@example.com';
+                document.getElementById('settingsPhone').value = '+7 (999) 123-45-67';
+                document.getElementById('notifyOrders').checked = true;
+                document.getElementById('notifyPromo').checked = true;
+                showToast('↺ Настройки сброшены до стандартных', 'info');
+            });
+        }
+        
+        // Загрузка сохраненных настроек
+        const savedSettings = localStorage.getItem('userSettings');
+        if (savedSettings) {
+            const settings = JSON.parse(savedSettings);
+            if (document.getElementById('settingsName')) document.getElementById('settingsName').value = settings.name;
+            if (document.getElementById('settingsEmail')) document.getElementById('settingsEmail').value = settings.email;
+            if (document.getElementById('settingsPhone')) document.getElementById('settingsPhone').value = settings.phone;
+            if (document.getElementById('notifyOrders')) document.getElementById('notifyOrders').checked = settings.notifyOrders;
+            if (document.getElementById('notifyPromo')) document.getElementById('notifyPromo').checked = settings.notifyPromo;
+            document.getElementById('userName').innerText = settings.name;
+        }
     </script>
 </body>
 </html>

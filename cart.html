@@ -2,22 +2,183 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Корзина</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - Тыжпрограммист</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #15181f;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .cart-table th, .cart-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #2a2d36;
+        }
+        .cart-table th {
+            background: #111317;
+            color: #c084fc;
+            font-weight: 600;
+        }
+        .cart-table tr:last-child td {
+            border-bottom: none;
+        }
+        .quantity-input {
+            width: 70px;
+            padding: 8px;
+            background: #0a0c10;
+            border: 1px solid #3f434e;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+        }
+        .cart-summary {
+            background: #15181f;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+            text-align: right;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 60px;
+            background: #15181f;
+            border-radius: 16px;
+        }
+    </style>
 </head>
 <body>
-    <header class="header">...</header>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <a href="index.html" class="logo">Тыжпрограммист</a>
+                <ul class="nav-links">
+                    <li><a href="catalog.html">Каталог</a></li>
+                    <li><a href="configurator.html">Собрать ПК</a></li>
+                    <li><a href="service.html">Сервис</a></li>
+                    <li><a href="profile.html">Профиль</a></li>
+                </ul>
+                <div class="header-actions">
+                    <button class="icon-btn" id="consultantTrigger">💬</button>
+                    <a href="cart.html" class="icon-btn">🛒 <span class="cart-count">0</span></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <main class="container">
-        <h1>Корзина</h1>
-        <table style="width:100%; border-collapse:collapse;">
-            <thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th><th></th></tr></thead>
-            <tbody id="cart-items-container"></tbody>
-        </table>
-        <div style="text-align:right; margin-top:20px;">
-            <h3>Итого: <span id="cart-total">0</span> ₽</h3>
-            <button class="btn-primary">Оформить заказ</button>
+        <div style="margin: 30px 0;">
+            <div style="margin-bottom: 20px;">
+                <a href="index.html" style="color: #9ca3af; text-decoration: none;">← На главную</a>
+            </div>
+            <h1 class="section-title" style="margin-top: 0;">🛒 Корзина</h1>
+            
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Товар</th>
+                        <th>Кол-во</th>
+                        <th>Цена</th>
+                        <th>Сумма</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items-container"></tbody>
+            </table>
+            
+            <div class="cart-summary">
+                <h3>Итого: <span id="cart-total" style="color: #c084fc;">0</span> ₽</h3>
+                <div style="display: flex; gap: 16px; justify-content: flex-end; margin-top: 20px;">
+                    <a href="catalog.html" class="btn btn-outline">📦 Продолжить покупки</a>
+                    <button class="btn btn-primary" id="checkoutBtn">✅ Оформить заказ</button>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Виджет консультанта -->
+    <div class="consultant-widget" id="consultantWidget">
+        <div class="consultant-btn">💬</div>
+        <div id="chatWindow" class="chat-window hidden">
+            <div class="chat-header">Консультант <span id="closeChat" style="cursor:pointer">✖</span></div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Задайте вопрос...">
+                <button id="chatSend" class="btn btn-primary btn-sm">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">© 2025 Тыжпрограммист — Ваш проводник в мир технологий</div>
+    </footer>
+
     <script src="js/main.js"></script>
+    <script>
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            if (!container) return;
+            
+            const cart = JSON.parse(localStorage.getItem('techCart') || '[]');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<tr><td colspan="5" class="empty-cart">🛒 Корзина пуста<br><br><a href="catalog.html" class="btn btn-primary">Перейти в каталог</a></td></tr>`;
+                document.getElementById('cart-total').innerText = '0';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                html += `
+                    <tr>
+                        <td><strong>${item.name}</strong></td>
+                        <td><input type="number" value="${item.quantity}" min="1" style="width:70px; background:#0a0c10; border:1px solid #3f434e; border-radius:8px; padding:8px; color:white; text-align:center;" data-idx="${index}" class="cart-qty"></td>
+                        <td>${item.price.toLocaleString()} ₽</td>
+                        <td style="color:#c084fc; font-weight:bold;">${itemTotal.toLocaleString()} ₽</td>
+                        <td><button class="btn btn-danger btn-sm" data-idx="${index}" id="remove-item-${index}">🗑 Удалить</button></td>
+                    </tr>
+                `;
+            });
+            container.innerHTML = html;
+            document.getElementById('cart-total').innerText = total.toLocaleString();
+            
+            document.querySelectorAll('.cart-qty').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const idx = e.target.dataset.idx;
+                    const cart = JSON.parse(localStorage.getItem('techCart') || '[]');
+                    cart[idx].quantity = parseInt(e.target.value);
+                    localStorage.setItem('techCart', JSON.stringify(cart));
+                    renderCartPage();
+                    if (typeof updateCartUI === 'function') updateCartUI();
+                });
+            });
+            
+            cart.forEach((_, idx) => {
+                const btn = document.getElementById(`remove-item-${idx}`);
+                if(btn) btn.onclick = () => {
+                    const cart = JSON.parse(localStorage.getItem('techCart') || '[]');
+                    cart.splice(idx, 1);
+                    localStorage.setItem('techCart', JSON.stringify(cart));
+                    renderCartPage();
+                    if (typeof updateCartUI === 'function') updateCartUI();
+                };
+            });
+        }
+        
+        document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+            alert('✅ Заказ оформлен! Спасибо за покупку!');
+            localStorage.removeItem('techCart');
+            renderCartPage();
+            if (typeof updateCartUI === 'function') updateCartUI();
+        });
+        
+        renderCartPage();
+    </script>
 </body>
 </html>
